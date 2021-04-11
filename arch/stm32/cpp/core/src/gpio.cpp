@@ -19,30 +19,34 @@ GPIO_instance* GPIO_instances() {
 		instancesStatic[i] = instance;
 	}
 	
-#if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN || defined RCC_APB2ENR_IOPAEN
+#if defined RCC_AHBENR_GPIOAEN || defined RCC_AHB1ENR_GPIOAEN || defined RCC_AHB2ENR_GPIOAEN || defined RCC_APB2ENR_IOPAEN
 	instancesStatic[GPIO_PORT_A].regs = GPIOA;
 #endif
 
-#if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN || defined RCC_APB2ENR_IOPBEN
+#if defined RCC_AHBENR_GPIOBEN || defined RCC_AHB1ENR_GPIOBEN || defined RCC_AHB2ENR_GPIOBEN || defined RCC_APB2ENR_IOPBEN
 	instancesStatic[GPIO_PORT_B].regs = GPIOB;
 #endif
 
-#if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN || defined RCC_APB2ENR_IOPCEN
+#if defined RCC_AHBENR_GPIOCEN || defined RCC_AHB1ENR_GPIOCEN || defined RCC_AHB2ENR_GPIOCEN || defined RCC_APB2ENR_IOPCEN
 	instancesStatic[GPIO_PORT_C].regs = GPIOC;
 #endif
 
-#if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN || defined RCC_APB2ENR_IOPDEN
+#if defined RCC_AHBENR_GPIODEN || defined RCC_AHB1ENR_GPIODEN || defined RCC_AHB2ENR_GPIODEN || defined RCC_APB2ENR_IOPDEN
 	instancesStatic[GPIO_PORT_D].regs = GPIOD;
 #endif
 
-#if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN || defined RCC_APB2ENR_IOPEEN
+#if defined RCC_AHBENR_GPIOEEN || defined RCC_AHB1ENR_GPIOEEN || defined RCC_AHB2ENR_GPIOEEN || defined RCC_APB2ENR_IOPEEN
 	instancesStatic[GPIO_PORT_E].regs = GPIOE;
 #endif
 
 #if defined RCC_AHBENR_GPIOFEN || defined RCC_AHB1ENR_GPIOFEN
 	instancesStatic[GPIO_PORT_F].regs = GPIOF;
 #endif
-	
+
+#if defined RCC_AHB2ENR_GPIOHEN
+    ((*instancesStatic))[GPIO_PORT_H].regs = GPIOH;
+#endif
+    
 	return instancesStatic;
 }
 
