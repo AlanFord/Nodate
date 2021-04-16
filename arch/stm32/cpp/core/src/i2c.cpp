@@ -235,20 +235,24 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
 	if (!instance.active) { return false; } // Interface isn't active yet.
     
     // Determine I2C clock source and frequency
-#if defined STM32F0
-    i2cClock = HSI_VALUE;
-#elif defined STM32F4 || defined STM32F1 || defined STM32F7 || defined STM32L4
-    // use APB1
     divisor = (RCC->CFGR && RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
     if (divisor != 0) {
         divisor = divisor - 7;
         if (divisor > 4) divisor++;
         i2cClock = SystemCoreClock >> divisor;
     }
+#if defined STM32F0
+    divisor = (RCC->CFGR && RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos;
+#else
     divisor = (RCC->CFGR && RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
+#endif
     if (divisor != 0) {
         divisor = divisor - 3;
-        i2cClock = SystemCoreClock >> divisor;
+        i2cClock = i2cClock >> divisor;
+    }
+#if defined STM32F0
+    if (device == I2C_1) {
+        i2cClock = HSI_VALUE;
     }
 #endif
 	// Set timing register.
