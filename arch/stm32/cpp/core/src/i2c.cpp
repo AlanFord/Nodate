@@ -10,6 +10,7 @@
 
 
 #include <gpio.h>
+#include <rcc.h>
 
 
 const int i2c_count = 3;
@@ -217,19 +218,48 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 // Start I2C master mode on the target I2C peripheral.
 bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uint8_t)> callback) {
 	I2C_device &instance = i2cList[device];
-	
+    uint32_t i2cClock;
+    uint32_t divisor;
+#if defined STM32F0
+  #define HSI_VALUE    ((uint32_t)8000000)
+#elif defined STM32F1
+#define HSI_VALUE    ((uint32_t)8000000)
+#elif defined STM32F4
+#define HSI_VALUE    ((uint32_t)16000000)
+#elif defined STM32L4
+#define HSI_VALUE    ((uint32_t)16000000)
+#elif defined STM32F7
+#define HSI_VALUE    ((uint32_t)16000000)
+#endif
 	// Check status. Set parameters.
 	if (!instance.active) { return false; } // Interface isn't active yet.
+    
+    // Determine I2C clock source and frequency
 #if defined STM32F0
+    i2cClock = HSI_VALUE;
+#elif defined STM32F4 || defined STM32F1 || defined STM32F7 || defined STM32L4
+    // use APB1
+    divisor = (RCC->CFGR && RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
+    if (divisor != 0) {
+        divisor = divisor - 7;
+        if (divisor > 4) divisor++;
+        i2cClock = SystemCoreClock >> divisor;
+    }
+    divisor = (RCC->CFGR && RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
+    if (divisor != 0) {
+        divisor = divisor - 3;
+        i2cClock = SystemCoreClock >> divisor;
+    }
+#endif
 	// Set timing register.
 	//instance.regs->TIMINGR = (uint32_t) 0x00B01A4B;
-	if (SystemCoreClock == 8000000) {
+	if (i2cClock == 8000000) {
 		instance.regs->TIMINGR = i2c_timings_8[mode];
 	}
-	else if (SystemCoreClock == 16000000) {
+	else if (i2cClock == 16000000) {
 		instance.regs->TIMINGR = i2c_timings_16[mode];
 	}
-	else if (SystemCoreClock == 48000000) {
+	else if (i2cClock == 48000000) {
 		instance.regs->TIMINGR = i2c_timings_48[mode];
 	}
 	else {
@@ -242,7 +272,6 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
 	
 	// Enable peripheral.
 	instance.regs->CR1 |= I2C_CR1_PE;
-#endif
 	
 	// Save parameters.
 	instance.callback = callback;
