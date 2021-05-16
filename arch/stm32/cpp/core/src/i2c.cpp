@@ -59,7 +59,7 @@ uint32_t i2c_timings_16[4];
 uint32_t i2c_timings_48[4];
 
 bool I2C_timings() {
-#if defined __stm32f0	
+#if defined __stm32f0 || defined __stm32f7
 	i2c_timings_8[0] = 0x1042C3C7;
 	i2c_timings_8[1] = 0x10420F13;
 	i2c_timings_8[2] = 0x00310309;
@@ -413,7 +413,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 // --- SEND TO SLAVE BEGIN ---
 bool I2C::sendToSlaveBegin(I2C_devices device) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined STM32F7
     instance.regs->CR2 |= (instance.slaveTarget << 1);
 
 	return true;
@@ -425,7 +425,7 @@ bool I2C::sendToSlaveBegin(I2C_devices device) {
 // -- SEND TO SLAVE BYTE ---
 bool sendToSlaveByte(I2C_devices device, uint8_t data) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined __stm32f7
 	instance.regs->CR2 &= ~(0xff << 16);
 	instance.regs->CR2 |= (uint32_t) 1 << 16;
 	
@@ -458,7 +458,7 @@ bool sendToSlaveByte(I2C_devices device, uint8_t data) {
 // --- SEND TO SLAVE BYTES ---
 bool I2C::sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined __stm32f7
 	//instance.regs->CR2 &= ~(0xff << 16);
 	instance.regs->CR2 |= I2C_CR2_START | len << 16;
 	
@@ -493,7 +493,7 @@ bool I2C::sendToSlaveBytes(I2C_devices device, uint8_t* data, uint8_t len) {
 // --- SEND TO SLAVE END ---
 bool I2C::sendToSlaveEnd(I2C_devices device) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined __stm32f7
 	instance.regs->CR2 |= I2C_CR2_STOP;
 	
 	return true;
@@ -507,7 +507,7 @@ bool I2C::sendToSlaveEnd(I2C_devices device) {
 // Send data to the Master on the I2C device.
 bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined __stm32f7
 	//
 	
 	return true;
