@@ -44,7 +44,7 @@ GPIO_instance* GPIO_instances() {
 #endif
 
 #if defined RCC_AHB2ENR_GPIOHEN
-    ((*instancesStatic))[GPIO_PORT_H].regs = GPIOH;
+    instancesStatic[GPIO_PORT_H].regs = GPIOH;
 #endif
     
 	return instancesStatic;

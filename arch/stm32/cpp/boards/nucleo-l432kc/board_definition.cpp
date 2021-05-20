@@ -29,18 +29,19 @@ static GpioPinDef usartRxDef[2];
 // TODO: Finish clock configuration.
 bool init() {
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
-	maxSysClockCfg.HSE_bypass 	= false;
+	maxSysClockCfg.HSE_bypass 	= true;
 	maxSysClockCfg.HSI_enabled	= false;
 	maxSysClockCfg.PLL_enabled = true;
-	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSI;
+	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSE;
 	maxSysClockCfg.PLLM		= 1;
-	maxSysClockCfg.PLLN		= 1;
+	maxSysClockCfg.PLLN		= 20;
 	maxSysClockCfg.PLLP		= 1;
 	maxSysClockCfg.PLLQ		= 1;
+    maxSysClockCfg.PLLR     = 1;
 	maxSysClockCfg.AHB_prescale	= 1;
 	maxSysClockCfg.APB1_prescale	= 1;
 	maxSysClockCfg.APB2_prescale	= 1;
-	maxSysClockCfg.FLASH_latency	= 1;
+	maxSysClockCfg.FLASH_latency	= 4;
 
 	BoardLED bl;
 	bl.pin.port = GPIO_PORT_B;

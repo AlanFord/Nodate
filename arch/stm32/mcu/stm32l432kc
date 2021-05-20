@@ -9,6 +9,6 @@ MCU_CORE := stm32l432
 MCU_RAM := 65536
 MCU_FLASH_KB := 256
 
-MCU_FLAGS := -mcpu=cortex-m4 -mthumb
+MCU_FLAGS := -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb
 
 MCU_LD := stm32l432kcux.ld
