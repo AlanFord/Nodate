@@ -25,7 +25,7 @@ USART_device* USART_list() {
 	devicesStatic[USART_1].irqType = USART1_IRQn;
 #endif
 
-#if defined RCC_APB1ENR_USART2EN
+#if defined RCC_APB1ENR_USART2EN  || defined RCC_APB1ENR1_USART2EN
 	devicesStatic[USART_2].regs = USART2;
 	devicesStatic[USART_2].irqType = USART2_IRQn;
 #endif
@@ -82,7 +82,7 @@ GPIO USART::gpio;
 
 // Callback handlers.
 // Overrides the default handlers and allows the use of custom callback functions.
-#if defined __stm32f1 || defined __stm32f4 || defined __stm32f7
+#if defined __stm32f1 || defined __stm32f4 || defined __stm32f7 || defined __stm32l4
 extern "C" {
 	void USART1_IRQHandler(void);
 	void USART2_IRQHandler(void);
@@ -134,7 +134,7 @@ void USART3_4_IRQHandler(void) {
 	}
 }
 
-#elif defined __stm32f7
+#elif defined __stm32f7 || defined __stm32l4
 
 void USART1_IRQHandler(void) {
 	USART_device &instance = devicesStatic[0];
@@ -351,7 +351,7 @@ bool USART::startUart(USART_devices device, GPIO_ports tx_port, uint8_t tx_pin, 
     uint32_t usartClock = SystemCoreClock >> tmp;
     uint16_t uartdiv = usartClock / baudrate;
     
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
 	instance.regs->BRR = (((uartdiv / 16) << USART_BRR_DIV_MANTISSA_Pos) |
 							((uartdiv % 16) << USART_BRR_DIV_FRACTION_Pos));
 #elif defined __stm32f4 || defined __stm32f1
@@ -388,7 +388,7 @@ bool USART::sendUart(USART_devices device, char &ch) {
 	if (!instance.active) { return false; }
 	
 	// Copy bit to the device's transmission register.
-#if defined __stm32f0 || defined __stm32f7
+#if defined __stm32f0 || defined __stm32f7 || defined __stm32l4
 	while (!(instance.regs->ISR & USART_ISR_TXE)) {};
 	instance.regs->TDR = (uint8_t) ch;
 #elif defined __stm32f4
