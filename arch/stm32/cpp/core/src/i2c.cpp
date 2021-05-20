@@ -90,11 +90,25 @@ volatile uint8_t i2c_rxb = 0;
 extern "C" {
 	void I2C1_IRQHandler(void);
 }
+extern "C" {
+	void I2C2_IRQHandler(void);
+}
 
 
 void I2C1_IRQHandler(void) {
 	I2C_device &instance = i2cList[0];
 	
+	// Verify interrupt status.
+	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+		// Read byte (which clears RXNE flag).
+		i2c_rxb = instance.regs->RXDR;
+		instance.callback(i2c_rxb);
+	}
+}
+
+void I2C2_IRQHandler(void) {
+	I2C_device &instance = i2cList[1];
+
 	// Verify interrupt status.
 	if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
 		// Read byte (which clears RXNE flag).
