@@ -260,7 +260,11 @@ RccPeripheralHandle* peripheralHandles() {
 #elif defined RCC_APB2ENR_ADC1EN
 	peripheralHandlesStatic[RCC_ADC1].exists = true;
 	peripheralHandlesStatic[RCC_ADC1].enr = &(RCC->APB2ENR);
+#ifdef RCC_APB2ENR_ADCEN_Pos
+    peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADCEN_Pos;
+#else
 	peripheralHandlesStatic[RCC_ADC1].enable = RCC_APB2ENR_ADC1EN_Pos;
+#endif
 #endif
 
 #ifdef RCC_APB2ENR_ADC2EN

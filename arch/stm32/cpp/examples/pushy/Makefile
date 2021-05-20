@@ -16,7 +16,8 @@ NDLANGUAGE ?= cpp
 #BOARD ?= otter_pill
 #BOARD ?= stm32f0-discovery
 #BOARD ?= maple_mini
-BOARD ?= nucleo-l432kc
+#BOARD ?= nucleo-l432kc
+BOARD ?= nucleo-f030r8
 
 # Set the MCU and programmer types.
 #
