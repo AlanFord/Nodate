@@ -39,10 +39,10 @@ int main () {
 		button_port = boardButtons[0].pin.port;
 	}
 	else {
-		//button_pin = 1; // Nucleo-f042k6 (PB1)
-		//button_port = GPIO_PORT_B;
-		button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
-		button_port = GPIO_PORT_A;
+		button_pin = 1; // Nucleo-f042k6 (PB1)
+		button_port = GPIO_PORT_B;
+		//button_pin = 0; // STM32F0-Discovery / STM32F4-Discovery (PA0)
+		//button_port = GPIO_PORT_A;
 		//button_pin = 13; // Nucleo-F746ZG (PC13)
 		//button_port = GPIO_PORT_C;
 		//button_pin = 10; // Blue Pill / Otter Pill
