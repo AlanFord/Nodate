@@ -102,6 +102,34 @@ void I2C1_IRQHandler(void) {
 		instance.callback(i2c_rxb);
 	}
 }
+#elif defined __stm32f7
+
+extern "C" {
+    void I2C1_EV_IRQHandler(void);
+    void I2C2_EV_IRQHandler(void);
+}
+
+void I2C1_EV_IRQHandler(void) {
+    I2C_device &instance = i2cList[0];
+    
+    // Verify interrupt status.
+    if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+        // Read byte (which clears RXNE flag).
+        i2c_rxb = instance.regs->RXDR;
+        instance.callback(i2c_rxb);
+    }
+}
+
+void I2C2_EV_IRQHandler(void) {
+    I2C_device &instance = i2cList[1];
+    
+    // Verify interrupt status.
+    if ((instance.regs->ISR & I2C_ISR_RXNE) == I2C_ISR_RXNE) {
+        // Read byte (which clears RXNE flag).
+        i2c_rxb = instance.regs->RXDR;
+        instance.callback(i2c_rxb);
+    }
+}
 
 #elif defined __stm32f4
 /* extern "C" {
@@ -198,6 +226,9 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 	instance.regs->CR1 &= ~I2C_CR1_PE;	// Disable peripheral.
 	instance.regs->CR1 |= I2C_CR1_SWRST;
 	instance.regs->CR1 &= ~I2C_CR1_SWRST;
+#endif
+#ifdef __stm32f7
+    instance.regs->CR1 &= ~I2C_CR1_PE;    // Disable peripheral.
 #else
 
 #endif
@@ -242,6 +273,14 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
 	
 	// Enable peripheral.
 	instance.regs->CR1 |= I2C_CR1_PE;
+#elif defined STM32F7
+    instance.regs->TIMINGR = (uint32_t) 0x00C08CCE; // 36MHz, 100kHz, 100ns rise, 10 ns fall, analog enabled
+
+	// Enable interrupts on peripheral.
+	instance.regs->CR1 |= I2C_CR1_RXIE;
+
+	// Enable peripheral.
+	instance.regs->CR1 |= I2C_CR1_PE;
 #endif
 	
 	// Save parameters.
@@ -279,7 +318,7 @@ bool I2C::startSlave(I2C_devices device, uint8_t address) {
 // Send length bytes on the I2C bus to the set Slave address.
 bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined STM32F7
 	uint32_t cr2_reg = 0;
     cr2_reg |= (instance.slaveTarget << 1);
 	if (len > 0xff) {
@@ -481,8 +520,8 @@ bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 // Configure Master to receive data from a Slave device.
 bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
 	I2C_device &instance = i2cList[device];
+#if defined STM32F0 || defined STM32F7
     uint32_t timeOut = (uint32_t) 0x1000;
-#if defined STM32F0 
     /* Disable interrupt if is enabled. An active interrupt handler that reads the RXDR register field will automatically
        reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
     */
@@ -540,7 +579,7 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 bool I2C::receiveFromSlave(I2C_devices device, uint8_t len) {
     uint32_t timeOut = (uint32_t) 0x1000;
     I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined STM32F7
     while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
         if ((timeOut--) == 0) { return false; }
     }
@@ -572,7 +611,7 @@ bool I2C::receiveFromMaster(I2C_devices device, uint32_t count, uint8_t* buffer)
 // Stop I2C device and reset in preparation for new initialisation.
 bool I2C::stop(I2C_devices device) {
 	I2C_device &instance = i2cList[device];
-#if defined STM32F0
+#if defined STM32F0 || defined STM32F7
 	instance.regs->CR1 &= ~I2C_CR1_PE;
 
 	// Disable interrupt.
