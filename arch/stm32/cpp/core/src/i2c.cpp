@@ -220,16 +220,10 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
 	I2C_device &instance = i2cList[device];
     uint32_t i2cClock;
     uint32_t divisor;
-#if defined STM32F0
-  #define HSI_VALUE    ((uint32_t)8000000)
-#elif defined STM32F1
-#define HSI_VALUE    ((uint32_t)8000000)
-#elif defined STM32F4
-#define HSI_VALUE    ((uint32_t)16000000)
-#elif defined STM32L4
-#define HSI_VALUE    ((uint32_t)16000000)
-#elif defined STM32F7
-#define HSI_VALUE    ((uint32_t)16000000)
+#if defined STM32F0 || defined STM32F1
+    #define HSI_VALUE    ((uint32_t)8000000)
+#elif defined STM32F4 || defined STM32L4 || defined STM32F7
+    #define HSI_VALUE    ((uint32_t)16000000)
 #endif
 	// Check status. Set parameters.
 	if (!instance.active) { return false; } // Interface isn't active yet.
@@ -256,7 +250,6 @@ bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uin
     }
 #endif
 	// Set timing register.
-	//instance.regs->TIMINGR = (uint32_t) 0x00B01A4B;
 	if (i2cClock == 8000000) {
 		instance.regs->TIMINGR = i2c_timings_8[mode];
 	}
