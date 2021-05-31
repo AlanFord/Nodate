@@ -1,13 +1,14 @@
-# MCU definition file for the stm32f030r8t MCU.
+# MCU definition file for the stm32f030r8tx MCU.
 # Package: LQFP64.
 
 MCU_FAMILY := stm32f0
 MCU_GENUS := stm32f030x8
 MCU_GENUS_CAP := STM32F030x8
 
-MCU := stm32f030r8t
+MCU := stm32f030r8tx
 MCU_CORE := stm32f030
 MCU_RAM := 8192
+MCU_FLASH_KB := 64
 MCU_PACKAGE := lqfp64
 
 MCU_FLAGS := -mcpu=cortex-m0 -mthumb

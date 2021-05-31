@@ -28,7 +28,7 @@ static GpioPinDef usartRxDef[2];
 
 bool init() {
 	maxSysClockCfg.source 		= RCC_SYSCLOCK_SRC_PLL;
-	maxSysClockCfg.HSE_bypass 	= false;
+	maxSysClockCfg.HSE_bypass 	= true;
 	maxSysClockCfg.HSI_enabled	= false;
 	maxSysClockCfg.PLL_enabled = true;
 	maxSysClockCfg.PLL_source	= RCC_PLLCLOCK_SRC_HSI;

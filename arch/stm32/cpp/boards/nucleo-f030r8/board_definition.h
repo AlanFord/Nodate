@@ -43,7 +43,4 @@ extern BoardLED boardLEDs[1];
 extern uint8_t boardButtons_count;
 extern BoardButton boardButtons[1];
 
-// --- INCLUDES ---
-//#include <lan8742a/phy_definition.h>
-
 #endif
