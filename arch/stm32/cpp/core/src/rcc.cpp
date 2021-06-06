@@ -40,9 +40,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_A].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_A].enable = RCC_APB2ENR_IOPAEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOAEN
-    portHandlesStatic[RCC_PORT_A].exists = true;
-    portHandlesStatic[RCC_PORT_A].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_A].enable = RCC_AHB2ENR_GPIOAEN_Pos;
+	portHandlesStatic[RCC_PORT_A].exists = true;
+	portHandlesStatic[RCC_PORT_A].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_A].enable = RCC_AHB2ENR_GPIOAEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOBEN
@@ -58,9 +58,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_B].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_B].enable = RCC_APB2ENR_IOPBEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOBEN
-    portHandlesStatic[RCC_PORT_B].exists = true;
-    portHandlesStatic[RCC_PORT_B].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_B].enable = RCC_AHB2ENR_GPIOBEN_Pos;
+	portHandlesStatic[RCC_PORT_B].exists = true;
+	portHandlesStatic[RCC_PORT_B].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_B].enable = RCC_AHB2ENR_GPIOBEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOCEN
@@ -76,9 +76,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_C].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_C].enable = RCC_APB2ENR_IOPCEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOCEN
-    portHandlesStatic[RCC_PORT_C].exists = true;
-    portHandlesStatic[RCC_PORT_C].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_C].enable = RCC_AHB2ENR_GPIOCEN_Pos;
+	portHandlesStatic[RCC_PORT_C].exists = true;
+	portHandlesStatic[RCC_PORT_C].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_C].enable = RCC_AHB2ENR_GPIOCEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIODEN
@@ -94,9 +94,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_D].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_D].enable = RCC_APB2ENR_IOPDEN_Pos;
 #elif defined RCC_AHB2ENR_GPIODEN
-    portHandlesStatic[RCC_PORT_D].exists = true;
-    portHandlesStatic[RCC_PORT_D].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_D].enable = RCC_AHB2ENR_GPIODEN_Pos;
+	portHandlesStatic[RCC_PORT_D].exists = true;
+	portHandlesStatic[RCC_PORT_D].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_D].enable = RCC_AHB2ENR_GPIODEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOEEN
@@ -112,9 +112,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_E].enr = &(RCC->APB2ENR);
 	portHandlesStatic[RCC_PORT_E].enable = RCC_APB2ENR_IOPEEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOEEN
-    portHandlesStatic[RCC_PORT_E].exists = true;
-    portHandlesStatic[RCC_PORT_E].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_E].enable = RCC_AHB2ENR_GPIOEEN_Pos;
+	portHandlesStatic[RCC_PORT_E].exists = true;
+	portHandlesStatic[RCC_PORT_E].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_E].enable = RCC_AHB2ENR_GPIOEEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOFEN
@@ -126,8 +126,8 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_F].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_F].enable = RCC_AHB1ENR_GPIOFEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOFEN
-    portHandlesStatic[RCC_PORT_F].exists = true;
-    portHandlesStatic[RCC_PORT_F].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_F].exists = true;
+	portHandlesStatic[RCC_PORT_F].enr = &(RCC->AHB2ENR);
 	portHandlesStatic[RCC_PORT_F].enable = RCC_AHB2ENR_GPIOFEN_Pos;
 #endif
 
@@ -140,9 +140,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_G].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_G].enable = RCC_AHB1ENR_GPIOGEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOGEN
-    portHandlesStatic[RCC_PORT_G].exists = true;
-    portHandlesStatic[RCC_PORT_G].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_G].enable = RCC_AHB2ENR_GPIOGEN_Pos;
+	portHandlesStatic[RCC_PORT_G].exists = true;
+	portHandlesStatic[RCC_PORT_G].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_G].enable = RCC_AHB2ENR_GPIOGEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOHEN
@@ -154,9 +154,9 @@ RccPortHandle* portHandles() {
 	portHandlesStatic[RCC_PORT_H].enr = &(RCC->AHB1ENR);
 	portHandlesStatic[RCC_PORT_H].enable = RCC_AHB1ENR_GPIOHEN_Pos;
 #elif defined RCC_AHB2ENR_GPIOHEN
-    portHandlesStatic[RCC_PORT_H].exists = true;
-    portHandlesStatic[RCC_PORT_H].enr = &(RCC->AHB2ENR);
-    portHandlesStatic[RCC_PORT_H].enable = RCC_AHB2ENR_GPIOHEN_Pos;
+	portHandlesStatic[RCC_PORT_H].exists = true;
+	portHandlesStatic[RCC_PORT_H].enr = &(RCC->AHB2ENR);
+	portHandlesStatic[RCC_PORT_H].enable = RCC_AHB2ENR_GPIOHEN_Pos;
 #endif
 
 #ifdef RCC_AHBENR_GPIOIEN

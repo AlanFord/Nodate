@@ -110,7 +110,7 @@ struct RccSysClockConfig {
 	uint32_t PLLN;
 	uint32_t PLLP;
 	uint32_t PLLQ;
-    uint32_t PLLR;
+	uint32_t PLLR;
 	uint32_t AHB_prescale;
 	uint32_t APB1_prescale;
 	uint32_t APB2_prescale;

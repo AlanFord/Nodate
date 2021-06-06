@@ -37,10 +37,10 @@ bool init() {
 	maxSysClockCfg.PLLN		= 20;
 	maxSysClockCfg.PLLP		= 1;
 	maxSysClockCfg.PLLQ		= 1;
-    maxSysClockCfg.PLLR     = 1;
-	maxSysClockCfg.AHB_prescale	= 1;
+	maxSysClockCfg.PLLR		= 1;
+	maxSysClockCfg.AHB_prescale		= 1;
 	maxSysClockCfg.APB1_prescale	= 1;
-	maxSysClockCfg.APB2_prescale	= 1;
+	maxSysClockCfg.APB2_prescale	= 1
 	maxSysClockCfg.FLASH_latency	= 4;
 
 	BoardLED bl;
