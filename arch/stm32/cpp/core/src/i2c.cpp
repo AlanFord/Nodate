@@ -218,36 +218,36 @@ bool I2C::startI2C(I2C_devices device, GPIO_ports scl_port, uint8_t scl_pin, uin
 // Start I2C master mode on the target I2C peripheral.
 bool I2C::startMaster(I2C_devices device, I2C_modes mode, std::function<void(uint8_t)> callback) {
 	I2C_device &instance = i2cList[device];
-    uint32_t i2cClock;
-    uint32_t divisor;
+	uint32_t i2cClock;
+	uint32_t divisor;
 #if defined STM32F0 || defined STM32F1
-    #define HSI_VALUE    ((uint32_t)8000000)
+	#define HSI_VALUE    ((uint32_t)8000000)
 #elif defined STM32F4 || defined STM32L4 || defined STM32F7
-    #define HSI_VALUE    ((uint32_t)16000000)
+	#define HSI_VALUE    ((uint32_t)16000000)
 #endif
 	// Check status. Set parameters.
 	if (!instance.active) { return false; } // Interface isn't active yet.
-    
-    // Determine I2C clock source and frequency
-    divisor = (RCC->CFGR && RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
-    if (divisor != 0) {
-        divisor = divisor - 7;
-        if (divisor > 4) divisor++;
-        i2cClock = SystemCoreClock >> divisor;
-    }
+	
+	// Determine I2C clock source and frequency
+	divisor = (RCC->CFGR && RCC_CFGR_HPRE_Msk) >> RCC_CFGR_HPRE_Pos;
+	if (divisor != 0) {
+		divisor = divisor - 7;
+		if (divisor > 4) divisor++;
+		i2cClock = SystemCoreClock >> divisor;
+	}
 #if defined STM32F0
-    divisor = (RCC->CFGR && RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos;
+	divisor = (RCC->CFGR && RCC_CFGR_PPRE_Msk) >> RCC_CFGR_PPRE_Pos;
 #else
-    divisor = (RCC->CFGR && RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
+	divisor = (RCC->CFGR && RCC_CFGR_PPRE1_Msk) >> RCC_CFGR_PPRE1_Pos;
 #endif
-    if (divisor != 0) {
-        divisor = divisor - 3;
-        i2cClock = i2cClock >> divisor;
-    }
+	if (divisor != 0) {
+		divisor = divisor - 3;
+		i2cClock = i2cClock >> divisor;
+	}
 #if defined STM32F0
-    if (device == I2C_1) {
-        i2cClock = HSI_VALUE;
-    }
+	if (device == I2C_1) {
+		i2cClock = HSI_VALUE;
+	}
 #endif
 	// Set timing register.
 	if (i2cClock == 8000000) {
@@ -307,7 +307,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
 	uint32_t cr2_reg = 0;
-    cr2_reg |= (instance.slaveTarget << 1);
+	cr2_reg |= (instance.slaveTarget << 1);
 	if (len > 0xff) {
 		// Set RELOAD so that we can transmit more data after finishing a transfer cycle.
 		// Set NBYTES to the max value (0xff).
@@ -401,7 +401,7 @@ bool I2C::sendToSlave(I2C_devices device, uint8_t* data, uint16_t len) {
 bool I2C::sendToSlaveBegin(I2C_devices device) {
 	I2C_device &instance = i2cList[device];
 #if defined STM32F0
-    instance.regs->CR2 |= (instance.slaveTarget << 1);
+	instance.regs->CR2 |= (instance.slaveTarget << 1);
 
 	return true;
 #endif
@@ -507,42 +507,42 @@ bool I2C::sendToMaster(I2C_devices device, uint8_t* data, uint8_t len) {
 // Configure Master to receive data from a Slave device.
 bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) {
 	I2C_device &instance = i2cList[device];
-    uint32_t timeOut = (uint32_t) 0x1000;
+	uint32_t timeOut = (uint32_t) 0x1000;
 #if defined STM32F0 
-    /* Disable interrupt if is enabled. An active interrupt handler that reads the RXDR register field will automatically
-       reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
-    */
-    bool reEnableIRQ = false;
-    if (NVIC_GetEnableIRQ(instance.irqType) == 1) {
-        NVIC_DisableIRQ(instance.irqType);
-        reEnableIRQ = true;
-    }
-    
-    while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
-        if ((timeOut--) == 0) {
+	/* Disable interrupt if is enabled. An active interrupt handler that reads the RXDR register field will automatically
+	   reset the RXNE flag, preventing this routine from being notified that data is ready in the data register.
+	*/
+	bool reEnableIRQ = false;
+	if (NVIC_GetEnableIRQ(instance.irqType) == 1) {
+		NVIC_DisableIRQ(instance.irqType);
+		reEnableIRQ = true;
+	}
+	
+	while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
+		if ((timeOut--) == 0) {
 			if (reEnableIRQ) {
 				NVIC_EnableIRQ(instance.irqType);
 			}
 			
 			return false; 
 		}
-    }
+	}
 
-    instance.regs->CR2 =  I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
+	instance.regs->CR2 =  I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | (count << 16) | (instance.slaveTarget << 1) | (I2C_CR2_START);
 	
 	for (uint8_t i = 0; i < count; ++i) {
-        timeOut = (uint32_t) 0x1000;
-        // 1. Check ISR_RXNE == 1. (Receive data register Not Empty).
-        while ((instance.regs->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
-            if ((timeOut--) == 0) { return false; }
-            if (((instance.regs->ISR & I2C_ISR_BERR) == I2C_ISR_BERR) || ((instance.regs->ISR & I2C_ISR_ARLO) == I2C_ISR_ARLO)) {
+		timeOut = (uint32_t) 0x1000;
+		// 1. Check ISR_RXNE == 1. (Receive data register Not Empty).
+		while ((instance.regs->ISR & I2C_ISR_RXNE) != I2C_ISR_RXNE) {
+			if ((timeOut--) == 0) { return false; }
+			if (((instance.regs->ISR & I2C_ISR_BERR) == I2C_ISR_BERR) || ((instance.regs->ISR & I2C_ISR_ARLO) == I2C_ISR_ARLO)) {
 				if (reEnableIRQ) {
 					NVIC_EnableIRQ(instance.irqType);
 				}
-                return false;  // dumpster fire has occurred
-            }
-        }
-        // 2. Read RXDR into buffer.
+				return false;  // dumpster fire has occurred
+			}
+		}
+		// 2. Read RXDR into buffer.
 		buffer[i] = (uint8_t) instance.regs->RXDR;
 	}
 	
@@ -552,10 +552,10 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 	if ((instance.regs->ISR & I2C_ISR_TC) == I2C_ISR_TC) {
 		// TODO: restart session.
 	}
-    // Re-enable interrupt.
-    if (reEnableIRQ) {
-        NVIC_EnableIRQ(instance.irqType);
-    }
+	// Re-enable interrupt.
+	if (reEnableIRQ) {
+		NVIC_EnableIRQ(instance.irqType);
+	}
 #endif
 	
 	return true;
@@ -564,26 +564,26 @@ bool I2C::receiveFromSlave(I2C_devices device, uint32_t count, uint8_t* buffer) 
 
 // --- RECEIVE FROM SLAVE ---
 bool I2C::receiveFromSlave(I2C_devices device, uint8_t len) {
-    uint32_t timeOut = (uint32_t) 0x1000;
-    I2C_device &instance = i2cList[device];
+	uint32_t timeOut = (uint32_t) 0x1000;
+	I2C_device &instance = i2cList[device];
 #if defined STM32F0
-    while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
-        if ((timeOut--) == 0) { return false; }
-    }
+	while ((instance.regs->ISR & I2C_ISR_BUSY) == I2C_ISR_BUSY) {  // wait for the bus to become "unbusy"
+		if ((timeOut--) == 0) { return false; }
+	}
 	
-    instance.regs->CR2 &= ~(I2C_CR2_SADD_Msk | I2C_CR2_RD_WRN_Msk | I2C_CR2_NBYTES_Msk | I2C_CR2_RELOAD | I2C_CR2_AUTOEND_Msk | \
-                            I2C_CR2_START_Msk | I2C_CR2_START | I2C_CR2_STOP);  // clear the CR2 fields
-    instance.regs->CR2 |= ((instance.slaveTarget << 1) << I2C_CR2_SADD_Pos);
-    instance.regs->CR2 |= I2C_CR2_RD_WRN;
-    instance.regs->CR2 |= (0x1UL << I2C_CR2_NBYTES_Pos);
-    instance.regs->CR2 |= I2C_CR2_AUTOEND;
+	instance.regs->CR2 &= ~(I2C_CR2_SADD_Msk | I2C_CR2_RD_WRN_Msk | I2C_CR2_NBYTES_Msk | I2C_CR2_RELOAD | I2C_CR2_AUTOEND_Msk | \
+							I2C_CR2_START_Msk | I2C_CR2_START | I2C_CR2_STOP);  // clear the CR2 fields
+	instance.regs->CR2 |= ((instance.slaveTarget << 1) << I2C_CR2_SADD_Pos);
+	instance.regs->CR2 |= I2C_CR2_RD_WRN;
+	instance.regs->CR2 |= (0x1UL << I2C_CR2_NBYTES_Pos);
+	instance.regs->CR2 |= I2C_CR2_AUTOEND;
 
-    instance.regs->CR2 |= I2C_CR2_START;  // Transmit
-    
+	instance.regs->CR2 |= I2C_CR2_START;  // Transmit
+	
 
 #endif
-    
-    return true;
+	
+	return true;
 }
 
 // ---- RECEIVE FROM MASTER ---
