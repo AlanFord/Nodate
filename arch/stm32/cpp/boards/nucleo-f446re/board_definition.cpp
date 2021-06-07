@@ -20,7 +20,7 @@ BoardButton boardButtons[1];
 USART_def boardUSARTs[2];
 
 uint8_t boardLEDs_count = 1;
-uint8_t boardButtons_count = 0;
+uint8_t boardButtons_count = 1;
 
 uint8_t boardUSART_count = 2;
 static GpioPinDef usartTxDef[2];
@@ -43,8 +43,8 @@ bool init() {
 	maxSysClockCfg.FLASH_latency	= 1;
 
 	BoardLED bl;
-	bl.pin.port = GPIO_PORT_B;
-	bl.pin.pin = 3;
+	bl.pin.port = GPIO_PORT_A;
+	bl.pin.pin = 5;
 	bl.pin.pupd = GPIO_PULL_UP;
 	bl.pin.type = GPIO_PUSH_PULL;
 	bl.pin.speed = GPIO_LOW;
@@ -56,22 +56,22 @@ bool init() {
 	
 	USART_def usart;
 	usart.usart = USART_1;
-	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
+	usart.configs = 1;
+	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 9, .af = 7 };
+	// usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 6, .af = 0 };
 	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
+	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 10, .af = 7 };
+	// usartRxDef[1] = { .port = GPIO_PORT_B, .pin = 7, .af = 0 };
 	usart.rx = usartRxDef;
 	boardUSARTs[0] = usart;
 	
 	usart.usart = USART_2;
-	usart.configs = 2;
-	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 1 };
-	usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 14, .af = 1 };
+	usart.configs = 1;
+	usartTxDef[0] = { .port = GPIO_PORT_A, .pin = 2, .af = 7 };
+	// usartTxDef[1] = { .port = GPIO_PORT_B, .pin = 14, .af = 1 };
 	usart.tx = usartTxDef;
-	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 15, .af = 1 };
-	usartRxDef[1] = { .port = GPIO_PORT_A, .pin = 3, .af = 1 };
+	usartRxDef[0] = { .port = GPIO_PORT_A, .pin = 3, .af = 7 };
+	// usartRxDef[1] = { .port = GPIO_PORT_A, .pin = 3, .af = 1 };
 	usart.rx = usartRxDef;
 	boardUSARTs[1] = usart;
 	
