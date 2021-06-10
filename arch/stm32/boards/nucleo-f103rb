@@ -1,5 +1,5 @@
 # Definition file for the STM32 Nucleo-F103RB development board.
 
 MCU := stm32f103xb
-PROGRAMMER := interface/stlink-v2.cfg -f target/stm32f1x.cfg
+PROGRAMMER := board/st_nucleo_f103rb.cfg
 
