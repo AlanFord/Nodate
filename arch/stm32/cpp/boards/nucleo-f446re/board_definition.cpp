@@ -53,7 +53,8 @@ bool init() {
 
 	BoardButton bb;
 	bb.pin = { GPIO_PORT_C, 13, GPIO_PULL_UP };
-	
+	boardButtons[0] = bb;
+
 	USART_def usart;
 	usart.usart = USART_1;
 	usart.configs = 1;
