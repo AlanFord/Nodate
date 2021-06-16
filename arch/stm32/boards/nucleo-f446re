@@ -1,0 +1,5 @@
+# Definition file for the STM32 'Black Pill' STM32F446RE development board.
+
+MCU := stm32f446re
+PROGRAMMER := board/st_nucleo_f4.cfg
+

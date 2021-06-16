@@ -1,0 +1,5 @@
+# Definition file for the STM32 Nucleo-F103RB development board.
+
+MCU := stm32f103xb
+PROGRAMMER := board/st_nucleo_f103rb.cfg
+
