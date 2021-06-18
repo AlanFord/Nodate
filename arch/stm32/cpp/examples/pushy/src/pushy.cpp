@@ -1,10 +1,39 @@
 // Basic Pushy example for Nodate's STM32 framework.
 
+#include <usart.h>
+#include <io.h>
 #include <gpio.h>
 #include <nodate.h>
 
+#include "printf.h"
+
+
+void uartCallback(char ch) {
+	// Copy character into send buffer.
+#if defined  STM32F1 || defined STM32F4
+	USART::sendUart(USART_2, ch);
+#elif defined STM32F7
+	USART::sendUart(USART_3, ch);
+#else
+#error failed to identify board in pushy.cpp
+#endif
+}
+
 
 int main () {
+SystemCoreClockUpdate();
+#if defined STM32F1
+	// nucleo-f103rb
+	USART::startUart(USART_2, GPIO_PORT_A, 2, 0, GPIO_PORT_A, 3, 0, 9600, uartCallback);
+#elif defined STM32F4
+	// nucleo-f446re
+	USART::startUart(USART_2, GPIO_PORT_A, 2, 7, GPIO_PORT_A, 3, 7, 9600, uartCallback);
+#elif defined STM32F7
+	// nucleo-f746zg
+	USART::startUart(USART_3, GPIO_PORT_D, 8, 7, GPIO_PORT_D, 9, 7, 9600, uartCallback);
+#else
+#error failed to identify board in pushy.cpp
+#endif
 	// Set LED & button.
 	uint8_t 	led_pin;
 	GPIO_ports 	led_port;
@@ -26,8 +55,8 @@ int main () {
 		//led_port = GPIO_PORT_C;
 		//led_pin = 13;	// Otter Pill: Port B, pin 13.
 		//led_port = GPIO_PORT_B;
-		led_pin = 9;	// STM32F0-Discovery (PC9, green).
-		led_port = GPIO_PORT_C;
+		//led_pin = 9;	// STM32F0-Discovery (PC9, green).
+		//led_port = GPIO_PORT_C;
 		//led_pin = 1;	// Maple Mini
 		//led_port = GPIO_PORT_B;
 	}
@@ -58,6 +87,21 @@ int main () {
 	// Set input mode on button pin.
 	GPIO::set_input(button_port, button_pin, GPIO_FLOATING);
 	
+	// Set up stdout.
+#if defined STM32F1
+	// nucleo-f103rb
+	IO::setStdOutTarget(USART_2);
+#elif defined STM32F4
+	// nucleo-f446re
+	IO::setStdOutTarget(USART_2);
+#elif defined STM32F7
+	// nucleo-f746zg
+	IO::setStdOutTarget(USART_3);
+#else
+#error failed to identify board in pushy.cpp
+#endif
+
+	printf("Starting pushy example...\n");
 	// If the button pulls down to ground (high to low), 'button_down' is low when pushed.
 	// If the button is pulled up to Vdd (low to high), 'button_down' is high when pushed.
 	uint8_t button_down;
