@@ -12,13 +12,14 @@ NDLANGUAGE ?= cpp
 #BOARD ?= nucleo-f042k6
 #BOARD ?= blue_pill
 #BOARD ?= stm32f4-discovery
-#BOARD ?= nucleo-f746zg
 #BOARD ?= otter_pill
 #BOARD ?= stm32f0-discovery
 #BOARD ?= maple_mini
 #BOARD ?= nucleo-l432kc
+
 #BOARD ?= nucleo-f103rb
-BOARD ?= nucleo-f446re
+#BOARD ?= nucleo-f446re
+BOARD ?= nucleo-f746zg
 
 # Set the MCU and programmer types.
 #
@@ -37,7 +38,7 @@ APP_C_FILES = $(wildcard src/*.c)
 # Set Nodate modules to enable.
 # Available modules:
 # ethernet, i2c, gpio, interrupts, timer, usart
-NODATE_MODULES = gpio
+NODATE_MODULES = gpio usart
 
 # Set library modules to enable.
 # library name matches the folder name in libs/. E.g. freertos, LwIP, libscpi, bme280
