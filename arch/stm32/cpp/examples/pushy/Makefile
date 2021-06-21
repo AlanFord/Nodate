@@ -17,9 +17,10 @@ NDLANGUAGE ?= cpp
 #BOARD ?= maple_mini
 #BOARD ?= nucleo-l432kc
 
+BOARD ?= nucleo-f030r8
 #BOARD ?= nucleo-f103rb
 #BOARD ?= nucleo-f446re
-BOARD ?= nucleo-f746zg
+#BOARD ?= nucleo-f746zg
 
 # Set the MCU and programmer types.
 #
