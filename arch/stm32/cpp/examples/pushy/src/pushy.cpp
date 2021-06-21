@@ -10,7 +10,7 @@
 
 void uartCallback(char ch) {
 	// Copy character into send buffer.
-#if defined  STM32F1 || defined STM32F4
+#if defined  STM32F0 || STM32F1 || defined STM32F4
 	USART::sendUart(USART_2, ch);
 #elif defined STM32F7
 	USART::sendUart(USART_3, ch);
@@ -22,7 +22,10 @@ void uartCallback(char ch) {
 
 int main () {
 SystemCoreClockUpdate();
-#if defined STM32F1
+#if   defined STM32F0
+	// nucleo-f030r8
+	USART::startUart(USART_2, GPIO_PORT_A, 2, 1, GPIO_PORT_A, 3, 1, 9600, uartCallback);
+#elif defined STM32F1
 	// nucleo-f103rb
 	USART::startUart(USART_2, GPIO_PORT_A, 2, 0, GPIO_PORT_A, 3, 0, 9600, uartCallback);
 #elif defined STM32F4
@@ -88,10 +91,9 @@ SystemCoreClockUpdate();
 	GPIO::set_input(button_port, button_pin, GPIO_FLOATING);
 	
 	// Set up stdout.
-#if defined STM32F1
+#if defined  STM32F0 || STM32F1 || defined STM32F4
+	// nucleo-f030r8
 	// nucleo-f103rb
-	IO::setStdOutTarget(USART_2);
-#elif defined STM32F4
 	// nucleo-f446re
 	IO::setStdOutTarget(USART_2);
 #elif defined STM32F7
